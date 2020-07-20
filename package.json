@@ -1,0 +1,21 @@
+{
+  "name": "@gerblins/pg-migrate",
+  "version": "0.0.2",
+  "description": "PostgreSQL migration framework",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "bin": {
+    "pg-migrate": "bin/pg-migrate"
+  },
+  "dependencies": {
+    "@types/argparse": "^1.0.38",
+    "argparse": "^1.0.10",
+    "typescript": "^3.9.6",
+    "pg": "^8.3.0",
+    "require-from-string": "^2.0.2",
+    "@types/pg": "^7.14.4",
+    "@types/require-from-string": "^1.2.0"
+  }
+}
