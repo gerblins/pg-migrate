@@ -1,6 +1,6 @@
 {
   "name": "@gerblins/pg-migrate",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "PostgreSQL migration framework",
   "license": "MIT",
   "scripts": {
@@ -9,6 +9,7 @@
   "bin": {
     "pg-migrate": "bin/pg-migrate"
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@types/argparse": "^1.0.38",
     "argparse": "^1.0.10",
