@@ -1,6 +1,6 @@
 {
   "name": "@gerblins/pg-migrate",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "PostgreSQL migration framework",
   "license": "MIT",
   "scripts": {

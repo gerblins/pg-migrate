@@ -55,14 +55,22 @@ const main = async () => {
     .map((m) => m.default)
     .sort((a: Migration, b: Migration) => a.serial - b.serial);
 
-  const client = new pg.Client(await dbSettings());
+  const db = await dbSettings(undefined, args);
+  const client = new pg.Client(db);
   console.info(`Running migrations...`);
   await client.connect();
   try {
-    await migrate(client, migrations, "public", "__migrations");
-    console.info(`Migrations complete`);
+    await migrate(
+      client,
+      migrations,
+      db.migrationSchema || "public",
+      db.migrationTable || "__migrations",
+    );
+    console.info(`Migrations complete.`);
   } catch (err) {
-    console.error(`An error occurred while running migrations`);
+    console.error(
+      `An error occurred while running migrations. All changes have been reverted.`,
+    );
     console.error(err);
   }
   await client.end();

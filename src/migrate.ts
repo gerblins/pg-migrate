@@ -28,10 +28,11 @@ export class Migration {
 export const applyMigration = async (
   connection: MigrationClient,
   migration: Migration,
+  migrationSchema: string,
   migrationTable: string,
 ) => {
   const alreadyExists = await connection.query(
-    `SELECT * FROM ${migrationTable} WHERE id = $1`,
+    `SELECT * FROM ${migrationSchema}.${migrationTable} WHERE id = $1`,
     [migration.serial],
   );
   if (alreadyExists.rows.length) {
@@ -52,7 +53,7 @@ export const applyMigration = async (
     }
   }
   await connection.query(
-    `INSERT INTO ${migrationTable} (id, hash) VALUES ($1, $2)`,
+    `INSERT INTO ${migrationSchema}.${migrationTable} (id, hash) VALUES ($1, $2)`,
     [migration.serial, migration.hash],
   );
   console.info(
@@ -105,7 +106,7 @@ export const migrate = async (
   await connection.query("BEGIN");
   try {
     for (const migration of migrations) {
-      await applyMigration(connection, migration, migrationTable);
+      await applyMigration(connection, migration, schema, migrationTable);
     }
     if (commit) {
       await connection.query("COMMIT");
@@ -114,8 +115,7 @@ export const migrate = async (
     }
   } catch (err) {
     await connection.query("ROLLBACK");
-    console.error(err);
-    // throw err;
+    throw err;
   } finally {
     if ("release" in connection) {
       connection.release();

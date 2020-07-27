@@ -104,6 +104,7 @@ export const dbSettings = async (
   if (args) {
     argSettings = stripNull({
       ...args,
+      port: args.port && parseInt(args.port),
       connectionString: args.connection_string,
       migrationSchema: args.schema,
       migrationTable: args.table,
