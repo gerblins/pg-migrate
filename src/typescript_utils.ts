@@ -9,8 +9,6 @@ const DEFAULT_COMPILER_SETTINGS: CompilerOptions = {
   moduleResolution: ts.ModuleResolutionKind.NodeJs,
 };
 
-console.log("aa");
-
 export const listTsInFolder = async (folder: string) => {
   const files = await fs.readdir(folder);
   return files
