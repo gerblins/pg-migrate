@@ -1,4 +1,4 @@
-import { Migration } from "../../../dist";
+import { Migration } from "../../../lib";
 
 export default new Migration(2, [
   'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";',

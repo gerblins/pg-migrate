@@ -9,7 +9,8 @@
   "bin": {
     "pg-migrate": "bin/pg-migrate"
   },
-  "types": "./dist/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "dependencies": {
     "@types/argparse": "^1.0.38",
     "argparse": "^1.0.10",

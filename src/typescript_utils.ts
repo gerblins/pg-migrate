@@ -6,7 +6,10 @@ import requireFromString from "require-from-string";
 const DEFAULT_COMPILER_SETTINGS: CompilerOptions = {
   target: ts.ScriptTarget.ES2018,
   module: ts.ModuleKind.CommonJS,
+  moduleResolution: ts.ModuleResolutionKind.NodeJs,
 };
+
+console.log("aa");
 
 export const listTsInFolder = async (folder: string) => {
   const files = await fs.readdir(folder);
