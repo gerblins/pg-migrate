@@ -95,6 +95,7 @@ export const dbSettings = async (
       DB_DATABASE: "database",
       DB_PORT: ["port", undefined, (v) => parseInt(v)],
       DB_USER: "user",
+      DB_PASSWORD: "password",
       DB_MIGRATION_SCHEMA: "migrationSchema",
       DB_MIGRATION_TABLE: "migrationTable",
       DB_MIGRATION_FOLDER: "migrationFolder",
