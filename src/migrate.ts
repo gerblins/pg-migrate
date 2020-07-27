@@ -86,7 +86,7 @@ export const createMigrationTable = async (
 ) => {
   await connection.query(
     `CREATE TABLE ${schema}.${migrationTable} (
-      id INTEGER NOT NULL PRIMARY KEY,
+      id BIGINT NOT NULL PRIMARY KEY,
       hash TEXT NOT NULL,
       run_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`,
