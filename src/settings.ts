@@ -1,6 +1,7 @@
 import pg from "pg";
 import { promises as fs } from "fs";
 import { compileFiles } from ".";
+import path from "path";
 
 export interface DBSettings extends pg.ClientConfig {
   migrationSchema?: string;
@@ -9,10 +10,15 @@ export interface DBSettings extends pg.ClientConfig {
 
 export interface AppSettings {
   migrationsFolder: string;
+  migrationTemplate: string;
 }
 
 export const DEFAULT_SETTINGS_NAME = ".gpgm.ts";
 export const DEFAULT_MIGRATIONS_FOLDER = "migrations";
+export const DEFAULT_MIGRATION_TEMPLATE = path.join(
+  __dirname,
+  "../templates/migration.ts.tpl",
+);
 
 export const mapObject = (
   obj: { [key: string]: any },
@@ -76,7 +82,7 @@ export const dbSettings = async (
 ) => {
   let fileSettings: DBSettings = {};
   try {
-    await fs.stat(settingsFile);
+    await fs.access(settingsFile);
     const compiled = await compileFiles([settingsFile]);
     let module = compiled[0];
     if (module?.default) {
@@ -129,7 +135,7 @@ export const appSettings = async (
 ) => {
   let fileSettings: Partial<AppSettings> = {};
   try {
-    await fs.stat(settingsFile);
+    await fs.access(settingsFile);
     const compiled = await compileFiles([settingsFile]);
     let module = compiled[0];
     if (module?.default) {
@@ -143,6 +149,7 @@ export const appSettings = async (
   const envSettings: Partial<AppSettings> = stripUndefined(
     mapObject(env, {
       DB_MIGRATIONS_FOLDER: "migrationsFolder",
+      DB_MIGRATION_TEMPLATE: "migrationTemplate",
     }),
   );
 
@@ -150,11 +157,13 @@ export const appSettings = async (
   if (args) {
     argSettings = stripNull({
       migrationFolder: args.migrations,
+      migrationTemplate: args.template,
     });
   }
 
   const compiledSettings: AppSettings = {
     migrationsFolder: DEFAULT_MIGRATIONS_FOLDER,
+    migrationTemplate: DEFAULT_MIGRATION_TEMPLATE,
     ...fileSettings,
     ...envSettings,
     ...argSettings,

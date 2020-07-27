@@ -1,6 +1,6 @@
 {
   "name": "@gerblins/pg-migrate",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "PostgreSQL migration framework",
   "license": "MIT",
   "homepage": "https://github.com/gerblins/pg-migrate",
@@ -18,11 +18,12 @@
   "types": "./lib/index.d.ts",
   "dependencies": {
     "@types/argparse": "^1.0.38",
+    "@types/pg": "^7.14.4",
+    "@types/require-from-string": "^1.2.0",
     "argparse": "^1.0.10",
-    "typescript": "^3.9.6",
+    "handlebars": "^4.7.6",
     "pg": "^8.3.0",
     "require-from-string": "^2.0.2",
-    "@types/pg": "^7.14.4",
-    "@types/require-from-string": "^1.2.0"
+    "typescript": "^3.9.6"
   }
 }

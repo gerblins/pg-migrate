@@ -1,7 +1,15 @@
-import { migrate, Migration, dbSettings, appSettings } from ".";
+import {
+  migrate,
+  Migration,
+  dbSettings,
+  appSettings,
+  compileTemplate,
+} from ".";
 import pg from "pg";
 import { compileFolder } from "./typescript_utils";
 import { ArgumentParser } from "argparse";
+import { promises as fs } from "fs";
+import path from "path";
 
 const parser = new ArgumentParser({
   version: "0.0.1",
@@ -45,9 +53,15 @@ parser.addArgument(["-m", "--migrations"], {
   help: "Folder that contains the migrations",
 });
 
+parser.addArgument(["-tpl", "--template"], {
+  help: "Template to use for creating migrations",
+});
+
+parser.addArgument("command", { choices: ["migrate", "create"] });
+
 const args = parser.parseArgs();
 
-const main = async () => {
+const runMigrate = async () => {
   const settings = await appSettings(undefined, args);
   console.info(`Collecting migrations...`);
   const compiledFolder = await compileFolder(settings.migrationsFolder);
@@ -76,4 +90,34 @@ const main = async () => {
   await client.end();
 };
 
-main();
+const createMigration = async () => {
+  const settings = await appSettings(undefined, args);
+  const now = new Date();
+  const serial = `${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}${now.getUTCHours()}${now.getUTCMinutes()}${now.getUTCSeconds()}`;
+  const compiledTemplate = await compileTemplate(settings.migrationTemplate, {
+    serial,
+  });
+  const outfile = path.join(
+    settings.migrationsFolder,
+    `${serial}.migration.ts`,
+  );
+  try {
+    await fs.access(settings.migrationsFolder);
+  } catch {
+    console.log("Creating migrations folder...");
+    await fs.mkdir(settings.migrationsFolder);
+  }
+  await fs.writeFile(outfile, compiledTemplate);
+  console.info(`Migration created: ${outfile}`);
+};
+
+switch (args.command) {
+  case "migrate":
+    runMigrate();
+    break;
+  case "create":
+    createMigration();
+    break;
+  default:
+    break;
+}
