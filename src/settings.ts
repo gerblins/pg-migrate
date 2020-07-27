@@ -72,6 +72,7 @@ function stripNull<T>(obj: any): T {
 export const dbSettings = async (
   settingsFile: string = DEFAULT_SETTINGS_NAME,
   args?: any,
+  env: any = process.env,
 ) => {
   let fileSettings: DBSettings = {};
   try {
@@ -89,7 +90,7 @@ export const dbSettings = async (
   } catch {}
 
   const envSettings: DBSettings = stripUndefined(
-    mapObject(process.env, {
+    mapObject(env, {
       DB_HOST: "host",
       DB_DATABASE: "database",
       DB_PORT: ["port", undefined, (v) => parseInt(v)],
@@ -123,6 +124,7 @@ export const dbSettings = async (
 export const appSettings = async (
   settingsFile: string = DEFAULT_SETTINGS_NAME,
   args?: any,
+  env: any = process.env,
 ) => {
   let fileSettings: Partial<AppSettings> = {};
   try {
@@ -138,7 +140,7 @@ export const appSettings = async (
   } catch {}
 
   const envSettings: Partial<AppSettings> = stripUndefined(
-    mapObject(process.env, {
+    mapObject(env, {
       DB_MIGRATIONS_FOLDER: "migrationsFolder",
     }),
   );
