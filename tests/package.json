@@ -3,7 +3,7 @@
   "scripts": {
     "test": "yarn test:all",
     "test:all": "yarn test:basic",
-    "test:basic": "cd basic && pg-migrate"
+    "test:basic": "cd basic && pg-migrate migrate"
   },
   "dependencies": {
     "@gerblins/pg-migrate": "../"

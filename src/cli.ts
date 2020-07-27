@@ -57,7 +57,15 @@ parser.addArgument(["-tpl", "--template"], {
   help: "Template to use for creating migrations",
 });
 
-parser.addArgument("command", { choices: ["migrate", "create"] });
+const subparsers = parser.addSubparsers({ title: "command", dest: "command" });
+
+const migrateParser = subparsers.addParser("migrate");
+migrateParser.addArgument("--damp", {
+  action: "storeTrue",
+  help: "Runs the queries but rolls them back",
+});
+
+const createParser = subparsers.addParser("create");
 
 const args = parser.parseArgs();
 
@@ -79,8 +87,15 @@ const runMigrate = async () => {
       migrations,
       db.migrationSchema || "public",
       db.migrationTable || "__migrations",
+      !args.damp,
     );
-    console.info(`Migrations complete.`);
+
+    if (args.damp) {
+      console.info(`Rolling back...`);
+      console.info(`Damp run successful.`);
+    } else {
+      console.info(`Migrations complete.`);
+    }
   } catch (err) {
     console.error(
       `An error occurred while running migrations. All changes have been reverted.`,
