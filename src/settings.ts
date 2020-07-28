@@ -142,7 +142,7 @@ export const appSettings = async (
       module = module.default;
     }
     if (module?.app) {
-      fileSettings = module.db;
+      fileSettings = module.app;
     }
   } catch {}
 
