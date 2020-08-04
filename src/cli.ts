@@ -110,7 +110,13 @@ const runMigrate = async () => {
 const createMigration = async () => {
   const settings = await appSettings(undefined, args);
   const now = new Date();
-  const serial = `${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}${now.getUTCHours()}${now.getUTCMinutes()}${now.getUTCSeconds()}`;
+  const year = `${now.getUTCFullYear()}`.padStart(4, "0");
+  const month = `${now.getUTCMonth()}`.padStart(2, "0");
+  const day = `${now.getUTCDay()}`.padStart(2, "0");
+  const hours = `${now.getUTCHours()}`.padStart(2, "0");
+  const minutes = `${now.getUTCMinutes()}`.padStart(2, "0");
+  const seconds = `${now.getUTCSeconds()}`.padStart(2, "0");
+  const serial = year + month + day + hours + minutes + seconds;
   const compiledTemplate = await compileTemplate(settings.migrationTemplate, {
     serial,
   });
